@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Effects Studio - RPGエフェクト生成システム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1 class="app-title">
+                <span class="title-main">BATTLE EFFECTS</span>
+                <span class="title-sub">RPG エフェクト生成スタジオ</span>
+            </h1>
+            <div class="version">v1.0</div>
+        </header>
+
+        <div class="main-content">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="enemy-selection">
+                    <h3 class="panel-title">敵キャラクター選択</h3>
+                    <div class="enemy-grid" id="enemyGrid">
+                        <div class="enemy-card active" data-enemy="slime">
+                            <div class="enemy-avatar slime"></div>
+                            <span class="enemy-name">スライム</span>
+                        </div>
+                        <div class="enemy-card" data-enemy="goblin">
+                            <div class="enemy-avatar goblin"></div>
+                            <span class="enemy-name">ゴブリン</span>
+                        </div>
+                        <div class="enemy-card" data-enemy="dragon">
+                            <div class="enemy-avatar dragon"></div>
+                            <span class="enemy-name">ドラゴン</span>
+                        </div>
+                        <div class="enemy-card" data-enemy="skeleton">
+                            <div class="enemy-avatar skeleton"></div>
+                            <span class="enemy-name">スケルトン</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="attack-selection">
+                    <h3 class="panel-title">攻撃エフェクト</h3>
+                    <div class="attack-category">
+                        <h4 class="category-title">物理攻撃</h4>
+                        <div class="attack-buttons">
+                            <button class="attack-btn" data-attack="slash" data-duration="short">
+                                <span class="attack-icon">⚔️</span>
+                                <span class="attack-name">斬撃</span>
+                            </button>
+                            <button class="attack-btn" data-attack="stab" data-duration="short">
+                                <span class="attack-icon">🗡️</span>
+                                <span class="attack-name">突き</span>
+                            </button>
+                            <button class="attack-btn" data-attack="punch" data-duration="short">
+                                <span class="attack-icon">👊</span>
+                                <span class="attack-name">殴打</span>
+                            </button>
+                            <button class="attack-btn" data-attack="arrow" data-duration="medium">
+                                <span class="attack-icon">🏹</span>
+                                <span class="attack-name">矢撃</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="attack-category">
+                        <h4 class="category-title">魔法攻撃</h4>
+                        <div class="attack-buttons">
+                            <button class="attack-btn" data-attack="fireball" data-duration="medium">
+                                <span class="attack-icon">🔥</span>
+                                <span class="attack-name">火球</span>
+                            </button>
+                            <button class="attack-btn" data-attack="ice" data-duration="medium">
+                                <span class="attack-icon">❄️</span>
+                                <span class="attack-name">氷結</span>
+                            </button>
+                            <button class="attack-btn" data-attack="lightning" data-duration="short">
+                                <span class="attack-icon">⚡</span>
+                                <span class="attack-name">雷撃</span>
+                            </button>
+                            <button class="attack-btn" data-attack="wind" data-duration="medium">
+                                <span class="attack-icon">💨</span>
+                                <span class="attack-name">風刃</span>
+                            </button>
+                            <button class="attack-btn" data-attack="earth" data-duration="long">
+                                <span class="attack-icon">🗿</span>
+                                <span class="attack-name">地震</span>
+                            </button>
+                            <button class="attack-btn" data-attack="holy" data-duration="long">
+                                <span class="attack-icon">✨</span>
+                                <span class="attack-name">聖光</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="attack-category">
+                        <h4 class="category-title">特殊攻撃</h4>
+                        <div class="attack-buttons">
+                            <button class="attack-btn" data-attack="poison" data-duration="long">
+                                <span class="attack-icon">☠️</span>
+                                <span class="attack-name">毒霧</span>
+                            </button>
+                            <button class="attack-btn" data-attack="explosion" data-duration="medium">
+                                <span class="attack-icon">💥</span>
+                                <span class="attack-name">爆発</span>
+                            </button>
+                            <button class="attack-btn" data-attack="meteor" data-duration="long">
+                                <span class="attack-icon">☄️</span>
+                                <span class="attack-name">メテオ</span>
+                            </button>
+                            <button class="attack-btn" data-attack="ultimate" data-duration="ultimate">
+                                <span class="attack-icon">🌟</span>
+                                <span class="attack-name">究極技</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label class="control-label">エフェクト強度</label>
+                        <input type="range" id="intensity" min="1" max="10" value="7" class="control-slider">
+                        <span id="intensityValue" class="slider-value">7</span>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">再生速度</label>
+                        <input type="range" id="speed" min="0.5" max="2" value="1" step="0.1" class="control-slider">
+                        <span id="speedValue" class="slider-value">1.0x</span>
+                    </div>
+                    <div class="control-buttons">
+                        <button id="randomBtn" class="control-btn secondary">
+                            <span class="btn-icon">🎲</span>
+                            <span class="btn-text">ランダム</span>
+                        </button>
+                        <button id="soundBtn" class="control-btn">
+                            <span class="btn-icon">🔊</span>
+                        </button>
+                        <button id="fullscreenBtn" class="control-btn">
+                            <span class="btn-icon">⛶</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Battle Stage -->
+            <div class="battle-stage">
+                <div class="stage-background">
+                    <div class="bg-layer bg-sky"></div>
+                    <div class="bg-layer bg-mountains"></div>
+                    <div class="bg-layer bg-ground"></div>
+                </div>
+                
+                <div class="enemy-container" id="enemyContainer">
+                    <div class="enemy-sprite" id="enemySprite">
+                        <div class="enemy-image slime" id="enemyImage"></div>
+                        <div class="enemy-hp-bar">
+                            <div class="hp-fill" id="hpFill"></div>
+                        </div>
+                        <div class="enemy-status" id="enemyStatus"></div>
+                    </div>
+                </div>
+
+                <canvas id="effectCanvas" class="effect-canvas"></canvas>
+                <div class="particle-container" id="particleContainer"></div>
+                
+                <div class="damage-numbers" id="damageNumbers"></div>
+                <div class="status-effects" id="statusEffects"></div>
+                
+                <div class="screen-effects" id="screenEffects">
+                    <div class="flash-overlay" id="flashOverlay"></div>
+                    <div class="shake-container" id="shakeContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Effect Info Panel -->
+        <div class="info-panel">
+            <div class="effect-info" id="effectInfo">
+                <h4 class="info-title">エフェクト情報</h4>
+                <div class="info-content">
+                    <div class="info-item">
+                        <span class="info-label">攻撃タイプ:</span>
+                        <span class="info-value" id="attackType">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">継続時間:</span>
+                        <span class="info-value" id="duration">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">ダメージ:</span>
+                        <span class="info-value" id="damage">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">クリティカル:</span>
+                        <span class="info-value" id="critical">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="combo-system">
+                <h4 class="info-title">コンボシステム</h4>
+                <div class="combo-display">
+                    <div class="combo-count" id="comboCount">0</div>
+                    <div class="combo-label">COMBO</div>
+                </div>
+                <button id="resetCombo" class="reset-btn">リセット</button>
+            </div>
+        </div>
+
+        <!-- Audio Visualizer -->
+        <div class="audio-visualizer" id="audioVisualizer">
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+            <div class="visualizer-bar"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
